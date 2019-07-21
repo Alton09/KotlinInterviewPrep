@@ -2,6 +2,7 @@ package maps
 
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.*
 
@@ -67,5 +68,33 @@ class HashMapImplTest {
         val actualValue = map.get("Doesn't exist")
 
         assertThat(actualValue, `is`(nullValue()))
+    }
+
+    // TODO doesn't test get thread safety
+    @Test
+    fun `put and get are thread safe`() {
+        val map = HashMapImpl<String, Int>()
+        var wait = true
+        Thread {
+            for(i in 1..50) {
+                Thread.sleep(10)
+                map.put("A", i)
+            }
+            wait = false
+        }.start()
+        for(i in 51..100) {
+            Thread.sleep(10)
+            map.put("A", i)
+        }
+        while (wait) {
+            Thread.sleep(10)
+        }
+        val result = map.get("A")
+        var success = true
+        for(i in 1..100) {
+           success = result!!.contains(i)
+        }
+        print(result)
+        assertTrue(success)
     }
 }
