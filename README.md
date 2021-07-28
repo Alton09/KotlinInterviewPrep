@@ -1,1 +1,1 @@
-This project contains various interview questions and data structure implementations written in Kotlin to help prepare for interviewing.
+This project contains various Kotlin code snippets to help prepare for interviews.
